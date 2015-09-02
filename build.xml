@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="nanosummarybot" default="jar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="antlib:org.apache.ivy.ant ">
+
+    <property name="lib.dir" value="lib"/>
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
+    <property name="support.lib.dir" value="support/"/>
+    <property name="main-class" value="com.feedxl.NanoSummaryBot"/>
+    <property name="ivy.lib.dir" value="ivy/"/>
+	<property name="xprime.misc.lib.dir" value="../XPrimeMisc/${build.dir}/jar"/>
+	<property name="simpledb.lib.dir" value="../SimpleDBMigrate/${build.dir}/jar"/>
+	<property name="resources.dir" value="resources"/>
+
+    <path id="support.lib.path">
+        <fileset dir="${support.lib.dir}" includes="*.jar"/>
+    </path>
+
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="support.lib.path"/>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${ivy.lib.dir}"/>
+    </target>
+
+    <target name="resolve">
+        <ivy:retrieve/>
+    </target>
+
+    <target name="compile" depends="clean,resolve">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}">
+            <classpath>
+                <fileset dir="${ivy.lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            	<fileset dir="${xprime.misc.lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+        		<fileset dir="${simpledb.lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>            	
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <zipgroupfileset dir="${ivy.lib.dir}" includes="*.jar"/>
+            <zipgroupfileset dir="${xprime.misc.lib.dir}" includes="*.jar"/>
+            <zipgroupfileset dir="${simpledb.lib.dir}" includes="*.jar"/>
+        	<fileset dir="${resources.dir}" />
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+</project>

@@ -1,0 +1,9 @@
+<ivy-module version="2.0">
+    <info organisation="com.feedxl" module="SimpleDBMigrate"/>
+    <dependencies>
+        <dependency org="com.amazonaws" name="aws-java-sdk" rev="1.10.12"/>
+        <dependency org="com.google.code.gson" name="gson" rev="2.3.1"/>
+		<dependency org="javax.mail" name="mail" rev="1.4.4" />    
+    </dependencies>
+</ivy-module>
+
